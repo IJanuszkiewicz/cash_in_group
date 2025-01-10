@@ -1,0 +1,14 @@
+import 'package:cash_in_group/features/groups/data/group.dart';
+import 'package:cash_in_group/features/groups/data/group_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class GroupsCubit extends Cubit<List<Group>?> {
+  GroupsCubit(this._groupRepository, this._userId, [super.initialState]);
+
+  final GroupRepository _groupRepository;
+  final String _userId;
+
+  Future<void> fetch() async {
+    emit(await _groupRepository.getUsersGroups(_userId));
+  }
+}

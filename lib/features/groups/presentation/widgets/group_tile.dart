@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class GroupTile extends StatelessWidget {
   const GroupTile({required this.groupName, required this.groupId, super.key});
@@ -9,8 +10,9 @@ class GroupTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // TODO: redirect to group page
-      onTap: () {},
+      onTap: () {
+        context.go('/groups/$groupId');
+      },
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),

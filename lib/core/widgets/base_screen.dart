@@ -16,12 +16,8 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: floatingActionButton,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(title),
-        ),
+      appBar: AppBar(
+        title: Text(title),
       ),
       body: child,
       bottomNavigationBar: BottomAppBar(

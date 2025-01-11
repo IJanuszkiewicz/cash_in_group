@@ -13,7 +13,7 @@ class GroupsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      //TODO: add user data provider
+      //T ODO: add user data provider
       create: (context) =>
           GroupsCubit(context.read<GroupsRepository>(), '0')..fetch(),
       child: BaseScreen(

@@ -42,6 +42,11 @@ class ExpensesScreen extends StatelessWidget {
   Widget _fromDetails(GroupDetails details) {
     return BaseScreen(
       title: details.name,
+      floatingActionButton: FloatingActionButton(
+        // TODO: make new expense form
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
       child: Padding(
         padding: EdgeInsets.all(10),
         child: ListView.builder(itemBuilder: (buildContext, index) {

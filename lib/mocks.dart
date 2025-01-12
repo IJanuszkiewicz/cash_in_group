@@ -20,6 +20,16 @@ class Mocks {
             DateTime.now()),
         Expense("Petrol", '2', Decimal.parse('150.0'),
             [users[0], users[1], users[2]], '0', DateTime.now()),
+        Expense(
+          "Groceries",
+          '1',
+          Decimal.parse('100.0'),
+          [users[0], users[1], users[2]],
+          '0',
+          DateTime.now().subtract(
+            Duration(days: 1),
+          ),
+        ),
       ],
     ),
     GroupDetails(

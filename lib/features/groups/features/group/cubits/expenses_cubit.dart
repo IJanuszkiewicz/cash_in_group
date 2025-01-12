@@ -10,6 +10,10 @@ class ExpensesCubit extends Cubit<ExspensesState> {
 
   Future<void> fetch() async {
     emit(ExspensesLoading());
+    await reload();
+  }
+
+  Future<void> reload() async {
     final details = await _groupRepository.getDetails(groupId);
     if (details == null) {
       emit(ExpensesError("Group not found"));

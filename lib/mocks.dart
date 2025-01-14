@@ -16,15 +16,16 @@ class Mocks {
       name: 'Wycieczka Marki',
       members: [users[0], users[1], users[2]],
       expenses: [
-        Expense("Beer", '0', Decimal.parse('50.0'), [users[0], users[1]], '0',
-            DateTime.now()),
-        Expense("Petrol", '2', Decimal.parse('150.0'),
-            [users[0], users[1], users[2]], '0', DateTime.now()),
+        Expense("0", "Beer", '0', Decimal.parse('50.0'),
+            [users[0].id, users[1].id], '0', DateTime.now()),
+        Expense("1", "Petrol", '2', Decimal.parse('150.0'),
+            [users[0].id, users[1].id, users[2].id], '0', DateTime.now()),
         Expense(
+          "2",
           "Groceries",
           '1',
           Decimal.parse('100.0'),
-          [users[0], users[1], users[2]],
+          [users[0].id, users[1].id, users[2].id],
           '0',
           DateTime.now().subtract(
             Duration(days: 1),

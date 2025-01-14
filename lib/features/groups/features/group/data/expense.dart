@@ -3,13 +3,14 @@ import 'package:cash_in_group/core/user.dart';
 import 'package:decimal/decimal.dart';
 
 class Expense implements Model<Expense> {
-  Expense(this.title, this.paidById, this.amount, this.participants,
+  Expense(this.id, this.title, this.paidById, this.amount, this.participantsIds,
       this.groupId, this.date);
 
+  final String id;
   final String title;
   final String paidById;
   final Decimal amount;
-  final List<User> participants;
+  final List<String> participantsIds;
   final String groupId;
   final DateTime date;
 

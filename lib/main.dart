@@ -1,4 +1,6 @@
 import 'package:cash_in_group/features/groups/data/groups_repository.dart';
+import 'package:cash_in_group/features/groups/features/expense/data/new_expense.dart';
+import 'package:cash_in_group/features/groups/features/expense/presentation/add_expense_screen.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_repository.dart';
 import 'package:cash_in_group/features/groups/features/group/presentation/widgets/expenses_screen.dart';
 import 'package:cash_in_group/features/groups/presentation/widgets/groups_screen.dart';
@@ -27,6 +29,17 @@ final GoRouter _router = GoRouter(
                   if (groupId == null) throw Exception("there should be id");
                   return ExpensesScreen(groupId: groupId);
                 },
+                routes: [
+                  GoRoute(
+                      path: '/new_expense',
+                      builder: (context, state) {
+                        final groupId = state.pathParameters['groupId'];
+                        if (groupId == null) {
+                          throw Exception("there should be id");
+                        }
+                        return AddExpenseScreen(groupId: groupId);
+                      }),
+                ],
               )
             ])
       ],

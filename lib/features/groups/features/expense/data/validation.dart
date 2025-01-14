@@ -11,9 +11,10 @@ class NewExpenseLocalValidators {
         if (val == null || val.isEmpty) return "Paid by is required";
         return null;
       };
-  FormFieldValidator<Decimal> get amountValidator => (Decimal? val) {
+  FormFieldValidator<String> get amountValidator => (String? val) {
         if (val == null) return "Amount is required";
-        if (val <= Decimal.parse("0")) return "Invalid amount";
+        // TODO: fix ',' bug
+        if (Decimal.parse(val) <= Decimal.parse("0")) return "Invalid amount";
         return null;
       };
   FormFieldValidator<List<String>> get participantsValidator =>

@@ -7,6 +7,7 @@ import 'package:cash_in_group/features/groups/features/group/data/group_reposito
 import 'package:cash_in_group/features/groups/features/group/presentation/widgets/expense_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:intl/intl.dart';
 
@@ -50,7 +51,9 @@ class ExpensesScreen extends StatelessWidget {
         title: details.name,
         floatingActionButton: FloatingActionButton(
           // TODO: make new expense form
-          onPressed: () {},
+          onPressed: () {
+            context.go('/groups/$groupId/new_expense');
+          },
           child: Icon(Icons.add),
         ),
         child: Padding(

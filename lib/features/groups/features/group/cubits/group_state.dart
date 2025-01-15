@@ -17,6 +17,10 @@ class GroupLoaded extends GroupState {
         grouped.putIfAbsent(key, () => [expense]);
       }
     }
+    for (var key in grouped.keys) {
+      grouped[key]!.sort((a, b) =>
+          b.date.millisecondsSinceEpoch - a.date.millisecondsSinceEpoch);
+    }
   }
 
   final GroupDetails details;

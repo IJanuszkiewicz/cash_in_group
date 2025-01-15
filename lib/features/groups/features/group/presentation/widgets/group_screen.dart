@@ -5,6 +5,7 @@ import 'package:cash_in_group/features/groups/features/group/data/expense.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_details.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_repository.dart';
 import 'package:cash_in_group/features/groups/features/group/presentation/widgets/expense_tile.dart';
+import 'package:cash_in_group/features/groups/features/group/presentation/widgets/expenses_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -37,56 +38,33 @@ class GroupScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                GroupLoaded(details: var details, grouped: var grouped) =>
-                  _fromGrouped(grouped, details, buildContext)
+                GroupLoaded() => _loaded(state)
               }),
     );
   }
 
-  Widget _fromGrouped(Map<DateTime, List<Expense>> expenses,
-      GroupDetails details, BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => BlocProvider.of<GroupCubit>(context).reload(),
-      child: BaseScreen(
-        title: details.name,
-        floatingActionButton: FloatingActionButton(
-          // TODO: make new expense form
-          onPressed: () {
-            context.go('/groups/$groupId/new_expense');
-          },
-          child: Icon(Icons.add),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: ListView.builder(itemBuilder: (buildContext, index) {
-            if (index >= expenses.keys.length) return null;
-            final key = expenses.keys.toList()[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildDateSeparator(key),
-                ...expenses[key]!
-                    .map((expense) => ExpenseTile(expense: expense)),
-              ],
-            );
-          }),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDateSeparator(DateTime date) {
-    final formattedDate = DateFormat.yMMMMd().format(date);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      width: double.infinity,
-      child: Text(
-        formattedDate,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
-    );
+  Widget _loaded(GroupLoaded state) {
+    return DefaultTabController(
+        length: 3,
+        child: BaseScreen(
+          title: state.details.name,
+          appBarBottom: TabBar(
+            tabs: [
+              Tab(text: "Expenses"),
+              Tab(
+                text: "Balance",
+              ),
+              Tab(
+                text: "Settlements",
+              )
+            ],
+          ),
+          child: TabBarView(children: [
+            ExpensesScreen(loadedState: state),
+            // TODO: fill tabs
+            Placeholder(),
+            Placeholder(),
+          ]),
+        ));
   }
 }

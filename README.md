@@ -1,3 +1,3 @@
 # cash_in_group
 
-A new Flutter project.
+App for managing finances.

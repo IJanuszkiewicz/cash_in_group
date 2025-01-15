@@ -1,8 +1,9 @@
 import 'package:cash_in_group/features/groups/data/groups_repository.dart';
+import 'package:cash_in_group/features/groups/features/balances/presentattion/balances_screen.dart';
 import 'package:cash_in_group/features/groups/features/expense/data/new_expense.dart';
 import 'package:cash_in_group/features/groups/features/expense/presentation/add_expense_screen.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_repository.dart';
-import 'package:cash_in_group/features/groups/features/group/presentation/widgets/expenses_screen.dart';
+import 'package:cash_in_group/features/groups/features/group/presentation/widgets/group_screen.dart';
 import 'package:cash_in_group/features/groups/presentation/widgets/groups_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,18 +28,29 @@ final GoRouter _router = GoRouter(
                 builder: (context, state) {
                   final groupId = state.pathParameters['groupId'];
                   if (groupId == null) throw Exception("there should be id");
-                  return ExpensesScreen(groupId: groupId);
+                  return GroupScreen(groupId: groupId);
                 },
                 routes: [
                   GoRoute(
-                      path: '/new_expense',
-                      builder: (context, state) {
-                        final groupId = state.pathParameters['groupId'];
-                        if (groupId == null) {
-                          throw Exception("there should be id");
-                        }
-                        return AddExpenseScreen(groupId: groupId);
-                      }),
+                    path: '/new_expense',
+                    builder: (context, state) {
+                      final groupId = state.pathParameters['groupId'];
+                      if (groupId == null) {
+                        throw Exception("there should be id");
+                      }
+                      return AddExpenseScreen(groupId: groupId);
+                    },
+                  ),
+                  GoRoute(
+                    path: '/balances',
+                    builder: (context, state) {
+                      final groupId = state.pathParameters['groupId'];
+                      if (groupId == null) {
+                        throw Exception("there should be id");
+                      }
+                      return BalancesScreen(groupId: groupId);
+                    },
+                  )
                 ],
               )
             ])

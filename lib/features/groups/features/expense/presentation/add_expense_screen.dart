@@ -7,6 +7,7 @@ import 'package:cash_in_group/features/groups/features/group/data/group_details.
 import 'package:cash_in_group/features/groups/features/group/data/group_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class AddExpenseScreen extends StatefulWidget {
@@ -23,6 +24,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final _titleKey = GlobalKey();
   final _amountKey = GlobalKey();
   final _validators = NewExpenseLocalValidators();
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     newExpense: var newExpense,
                     groupDetails: var groupDetails,
                   ) =>
-                    _loaded(newExpense, groupDetails),
+                    _loaded(newExpense, groupDetails, context),
                   NewExpenseStateLoading() => Center(
                       child: LoadingAnimationWidget.inkDrop(
                           color: Colors.white, size: 40)),
@@ -51,8 +54,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     );
   }
 
-  Widget _loaded(NewExpense newExpense, GroupDetails groupDetails) {
+  Widget _loaded(
+      NewExpense newExpense, GroupDetails groupDetails, BuildContext context) {
     return Form(
+      key: _formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -69,6 +74,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         key: _titleKey,
+                        controller: titleController,
                         decoration: InputDecoration(
                             labelText: "Expense name",
                             hintText: "ex. Groceries"),
@@ -92,6 +98,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         key: _amountKey,
+                        controller: amountController,
                         decoration: InputDecoration(
                             labelText: "Amount", hintText: "ex. 50.00"),
                         validator: _validators.amountValidator,
@@ -110,10 +117,18 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               users: groupDetails.members,
             ),
             TextButton(
-                onPressed: () {
-                  //TODO: implement submitting
-                },
-                child: Text("Submit")),
+              onPressed: () async {
+                final errors = await BlocProvider.of<NewExpenseCubit>(context)
+                    .addExpense(titleController.text, amountController.text,
+                        '0'); // TODO: add current user
+                if (errors.isEmpty) {
+                  context.go('/groups/${groupDetails.id}');
+                } else {
+                  // TODO: show errors
+                }
+              },
+              child: Text("Submit"),
+            ),
           ],
         ),
       ),

@@ -5,12 +5,14 @@ class BaseScreen extends StatelessWidget {
     required this.title,
     required this.child,
     this.floatingActionButton,
+    this.appBarBottom,
     super.key,
   });
 
   final Widget child;
   final String title;
   final Widget? floatingActionButton;
+  final PreferredSizeWidget? appBarBottom;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class BaseScreen extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       appBar: AppBar(
         title: Text(title),
+        bottom: appBarBottom,
       ),
       body: child,
       bottomNavigationBar: BottomAppBar(

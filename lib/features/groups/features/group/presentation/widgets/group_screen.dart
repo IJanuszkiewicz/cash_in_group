@@ -1,6 +1,6 @@
 import 'package:cash_in_group/core/widgets/base_screen.dart';
-import 'package:cash_in_group/features/groups/features/group/cubits/expenses_cubit.dart';
-import 'package:cash_in_group/features/groups/features/group/cubits/exspenses_state.dart';
+import 'package:cash_in_group/features/groups/features/group/cubits/group_cubit.dart';
+import 'package:cash_in_group/features/groups/features/group/cubits/group_state.dart';
 import 'package:cash_in_group/features/groups/features/group/data/expense.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_details.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_repository.dart';
@@ -11,8 +11,8 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:intl/intl.dart';
 
-class ExpensesScreen extends StatelessWidget {
-  const ExpensesScreen({required this.groupId, super.key});
+class GroupScreen extends StatelessWidget {
+  const GroupScreen({required this.groupId, super.key});
 
   final String groupId;
 
@@ -20,16 +20,16 @@ class ExpensesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          ExpensesCubit(groupId, context.read<GroupRepository>())..fetch(),
-      child: BlocBuilder<ExpensesCubit, ExspensesState>(
+          GroupCubit(groupId, context.read<GroupRepository>())..fetch(),
+      child: BlocBuilder<GroupCubit, GroupState>(
           builder: (buildContext, state) => switch (state) {
-                ExspensesLoading() => BaseScreen(
+                GroupLoading() => BaseScreen(
                     title: "Group details",
                     child: Center(
                         child: LoadingAnimationWidget.inkDrop(
                             color: Colors.white, size: 40)),
                   ),
-                ExpensesError(message: var m) => BaseScreen(
+                GroupError(message: var m) => BaseScreen(
                     title: 'Error',
                     child: Center(
                       child: Text(
@@ -37,7 +37,7 @@ class ExpensesScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                ExpensesLoaded(details: var details, grouped: var grouped) =>
+                GroupLoaded(details: var details, grouped: var grouped) =>
                   _fromGrouped(grouped, details, buildContext)
               }),
     );
@@ -46,7 +46,7 @@ class ExpensesScreen extends StatelessWidget {
   Widget _fromGrouped(Map<DateTime, List<Expense>> expenses,
       GroupDetails details, BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => BlocProvider.of<ExpensesCubit>(context).reload(),
+      onRefresh: () => BlocProvider.of<GroupCubit>(context).reload(),
       child: BaseScreen(
         title: details.name,
         floatingActionButton: FloatingActionButton(

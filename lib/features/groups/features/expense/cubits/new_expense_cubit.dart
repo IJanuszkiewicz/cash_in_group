@@ -2,6 +2,7 @@ import 'package:cash_in_group/core/user.dart';
 import 'package:cash_in_group/features/groups/features/expense/data/new_expense.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_details.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_repository.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,10 +48,16 @@ class NewExpenseCubit extends Cubit<NewExpenseState> {
     );
   }
 
-  Future<List<String>> addExpense() async {
+  Future<List<String>> addExpense(
+      String title, String amount, String paidBy) async {
     if (state is NewExpenseStateLoaded) {
       try {
         final newExpense = (state as NewExpenseStateLoaded).newExpense;
+        newExpense.title = title;
+        newExpense.amount = Decimal.parse(amount);
+        newExpense.date = DateTime.now();
+        newExpense.paidById = paidBy;
+
         final expnese = await _groupRepository.addExpense(newExpense);
         return [];
       } on Exception catch (e) {
@@ -64,7 +71,7 @@ class NewExpenseCubit extends Cubit<NewExpenseState> {
 
   void addParticipant(String userId) {
     if (state is! NewExpenseStateLoaded) {
-      throw ErrorDescription("Can't add member whan state hasn't loaded");
+      throw ErrorDescription("Can't add member when state hasn't loaded");
     }
     final loaded = (state as NewExpenseStateLoaded);
     loaded.newExpense.participantsIds ??= [];
@@ -76,7 +83,7 @@ class NewExpenseCubit extends Cubit<NewExpenseState> {
 
   void removeParticipant(String userId) {
     if (state is! NewExpenseStateLoaded) {
-      throw ErrorDescription("Can't add member whan state hasn't loaded");
+      throw ErrorDescription("Can't add member when state hasn't loaded");
     }
     final loaded = (state as NewExpenseStateLoaded);
     loaded.newExpense.participantsIds ??= [];

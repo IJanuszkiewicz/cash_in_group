@@ -1,12 +1,12 @@
 import 'package:cash_in_group/features/groups/features/group/data/expense.dart';
 import 'package:cash_in_group/features/groups/features/group/data/group_details.dart';
 
-sealed class ExspensesState {}
+sealed class GroupState {}
 
-class ExspensesLoading extends ExspensesState {}
+class GroupLoading extends GroupState {}
 
-class ExpensesLoaded extends ExspensesState {
-  ExpensesLoaded({required this.details}) {
+class GroupLoaded extends GroupState {
+  GroupLoaded({required this.details}) {
     grouped = {};
     for (var expense in details.expenses) {
       final key =
@@ -23,8 +23,8 @@ class ExpensesLoaded extends ExspensesState {
   late Map<DateTime, List<Expense>> grouped;
 }
 
-class ExpensesError extends ExspensesState {
+class GroupError extends GroupState {
   final String message;
 
-  ExpensesError(this.message);
+  GroupError(this.message);
 }

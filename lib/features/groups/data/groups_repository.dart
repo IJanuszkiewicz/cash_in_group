@@ -1,5 +1,7 @@
 import 'package:cash_in_group/features/groups/data/group.dart';
 import 'package:cash_in_group/mocks.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 abstract class GroupsRepository {
   Future<List<Group>> getUsersGroups(String userId);
@@ -12,5 +14,24 @@ class MockGroupsRepository implements GroupsRepository {
     return Mocks.groups
         .map((group) => Group(id: group.id, name: group.name))
         .toList();
+  }
+}
+
+const String groupsCollection = 'groups';
+
+class FirebaseGroupsRepository implements GroupsRepository {
+  final FirebaseFirestore _firestore;
+  late final CollectionReference _groupsCollection;
+
+  FirebaseGroupsRepository() : _firestore = FirebaseFirestore.instance {
+    _groupsCollection = _firestore.collection(groupsCollection);
+  }
+
+  @override
+  Future<List<Group>> getUsersGroups(String userId) {
+    return _groupsCollection.where('members', arrayContains: userId).get().then(
+        (value) => value.docs
+            .map((e) => Group(id: e.id, name: e['name'] as String))
+            .toList());
   }
 }

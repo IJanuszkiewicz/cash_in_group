@@ -63,7 +63,7 @@ class NewExpenseCubit extends Cubit<NewExpenseState> {
       } on Exception catch (e) {
         return [e.toString()];
       } catch (e) {
-        return ["Error accured"];
+        return ["Error occurred"];
       }
     }
     return ["No data"];

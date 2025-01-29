@@ -2,9 +2,10 @@ import 'package:cash_in_group/features/groups/features/group/data/expense.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseTile extends StatelessWidget {
-  const ExpenseTile({required this.expense, super.key});
+  const ExpenseTile({required this.expense, super.key, required this.currency});
 
   final Expense expense;
+  final String currency;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ExpenseTile extends StatelessWidget {
           ),
         ),
         title: Text(expense.title),
-        subtitle: Text(expense.amount.toString()),
+        subtitle: Text("${expense.amount.toStringAsFixed(2)} $currency"),
         trailing: Image.network("https://picsum.photos/250?image=9"),
       ),
     );

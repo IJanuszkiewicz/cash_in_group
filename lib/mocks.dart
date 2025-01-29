@@ -32,12 +32,14 @@ class Mocks {
           ),
         ),
       ],
+      currency: "zł",
     ),
     GroupDetails(
       id: '1',
       name: 'Dom',
       members: [users[0], users[1]],
       expenses: [],
+      currency: "zł",
     ),
   ];
 }

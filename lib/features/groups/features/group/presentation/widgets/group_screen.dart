@@ -6,6 +6,8 @@ import 'package:cash_in_group/features/groups/features/group/data/group_details.
 import 'package:cash_in_group/features/groups/features/group/data/group_repository.dart';
 import 'package:cash_in_group/features/groups/features/group/presentation/widgets/expense_tile.dart';
 import 'package:cash_in_group/features/groups/features/group/presentation/widgets/expenses_screen.dart';
+import 'package:cash_in_group/features/groups/features/group/presentation/widgets/members_screen.dart';
+import 'package:cash_in_group/features/groups/features/group/presentation/widgets/settlements_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +54,7 @@ class GroupScreen extends StatelessWidget {
             tabs: [
               Tab(text: "Expenses"),
               Tab(
-                text: "Balance",
+                text: "Members",
               ),
               Tab(
                 text: "Settlements",
@@ -61,9 +63,8 @@ class GroupScreen extends StatelessWidget {
           ),
           child: TabBarView(children: [
             ExpensesScreen(loadedState: state),
-            // TODO: fill tabs
-            Placeholder(),
-            Placeholder(),
+            MembersScreen(loadedState: state),
+            SettlementsScreen(loadedState: state),
           ]),
         ));
   }

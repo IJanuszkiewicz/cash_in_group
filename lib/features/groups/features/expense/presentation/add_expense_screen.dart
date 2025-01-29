@@ -1,4 +1,5 @@
 import 'package:cash_in_group/core/widgets/base_screen.dart';
+import 'package:cash_in_group/features/auth/auth_cubit.dart';
 import 'package:cash_in_group/features/groups/features/expense/cubits/new_expense_cubit.dart';
 import 'package:cash_in_group/features/groups/features/expense/data/new_expense.dart';
 import 'package:cash_in_group/features/groups/features/expense/data/validation.dart';
@@ -60,74 +61,108 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       key: _formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
+        child: ListView(
           children: [
-            SizedBox(
-              height: 100,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                  ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        key: _titleKey,
-                        controller: titleController,
-                        decoration: InputDecoration(
-                            labelText: "Expense name",
-                            hintText: "ex. Groceries"),
-                        validator: _validators.titleValidator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Expense Details",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            key: _titleKey,
+                            controller: titleController,
+                            decoration: InputDecoration(
+                              labelText: "Expense name",
+                              hintText: "ex. Groceries",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            validator: _validators.titleValidator,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            key: _amountKey,
+                            controller: amountController,
+                            decoration: InputDecoration(
+                              labelText: "Amount",
+                              hintText: "ex. 50.00",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            validator: _validators.amountValidator,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Participants",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          ParticipantPicker(
+                            participants: newExpense.participantsIds ?? [],
+                            users: groupDetails.members,
+                          ),
+                          const SizedBox(height: 16),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final errors =
+                                    await BlocProvider.of<NewExpenseCubit>(
+                                            context)
+                                        .addExpense(
+                                            titleController.text,
+                                            amountController.text,
+                                            BlocProvider.of<AuthCubit>(context)
+                                                .userUid);
+                                if (errors.isEmpty) {
+                                  context.go('/groups/${groupDetails.id}');
+                                } else {
+                                  // TODO: show errors
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: Text("Add Expense"),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 100,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                  ),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        key: _amountKey,
-                        controller: amountController,
-                        decoration: InputDecoration(
-                            labelText: "Amount", hintText: "ex. 50.00"),
-                        validator: _validators.amountValidator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Text("Participants"),
-            ParticipantPicker(
-              participants: newExpense.participantsIds ?? [],
-              users: groupDetails.members,
-            ),
-            TextButton(
-              onPressed: () async {
-                final errors = await BlocProvider.of<NewExpenseCubit>(context)
-                    .addExpense(titleController.text, amountController.text,
-                        '0'); // TODO: add current user
-                if (errors.isEmpty) {
-                  context.go('/groups/${groupDetails.id}');
-                } else {
-                  // TODO: show errors
-                }
-              },
-              child: Text("Submit"),
+              ],
             ),
           ],
         ),

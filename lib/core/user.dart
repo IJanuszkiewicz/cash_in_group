@@ -8,13 +8,17 @@ class User extends Model<User> {
 
   @override
   User fromJson(Map<String, Object> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
+    return User(
+      json['name'] as String,
+      json['id'] as String,
+    );
   }
 
   @override
   Map<String, Object> toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    return {
+      'name': name,
+      'id': id,
+    };
   }
 }

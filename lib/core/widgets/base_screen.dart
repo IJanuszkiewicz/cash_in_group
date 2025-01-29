@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BaseScreen extends StatelessWidget {
   const BaseScreen({
@@ -28,7 +29,9 @@ class BaseScreen extends StatelessWidget {
           children: [
             Expanded(
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.go('/groups');
+                },
                 icon: Icon(Icons.list),
               ),
             ),
@@ -40,7 +43,9 @@ class BaseScreen extends StatelessWidget {
             ),
             Expanded(
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.go('/profile');
+                },
                 icon: Icon(Icons.person),
               ),
             ),

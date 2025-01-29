@@ -1,8 +1,7 @@
 import 'package:cash_in_group/core/model.dart';
-import 'package:cash_in_group/core/user.dart';
 import 'package:decimal/decimal.dart';
 
-class Expense implements Model<Expense> {
+class Expense {
   Expense(this.id, this.title, this.paidById, this.amount, this.participantsIds,
       this.groupId, this.date);
 
@@ -14,15 +13,28 @@ class Expense implements Model<Expense> {
   final String groupId;
   final DateTime date;
 
-  @override
-  Expense fromJson(Map<String, Object> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
+  static Expense fromJson(Map<String, Object> json) {
+    return Expense(
+      json['id'] as String,
+      json['title'] as String,
+      json['paidBy'] as String,
+      Decimal.parse(json['amount'] as String),
+      List<String>.from(json['participants'] as List),
+      json['groupId'] as String,
+      DateTime.parse(json['date'] as String),
+    );
   }
 
   @override
   Map<String, Object> toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    return {
+      'id': id,
+      'title': title,
+      'paidBy': paidById,
+      'amount': amount.toString(),
+      'participants': participantsIds,
+      'groupId': groupId,
+      'date': date.toIso8601String(),
+    };
   }
 }

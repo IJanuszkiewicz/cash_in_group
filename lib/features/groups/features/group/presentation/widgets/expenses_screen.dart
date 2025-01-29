@@ -32,8 +32,10 @@ class ExpensesScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildDateSeparator(key),
-                ...expenses[key]!
-                    .map((expense) => ExpenseTile(expense: expense)),
+                ...expenses[key]!.map((expense) => ExpenseTile(
+                      expense: expense,
+                      currency: loadedState.details.currency,
+                    )),
               ],
             );
           }),

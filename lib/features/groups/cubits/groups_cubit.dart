@@ -9,6 +9,7 @@ class GroupsCubit extends Cubit<List<Group>?> {
   final String _userId;
 
   Future<void> fetch() async {
-    emit(await _groupRepository.getUsersGroups(_userId));
+    final groups = await _groupRepository.getUsersGroups(_userId);
+    emit(groups);
   }
 }

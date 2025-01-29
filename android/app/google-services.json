@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "982403405931",
+    "project_id": "cashingroup-9c9a7",
+    "storage_bucket": "cashingroup-9c9a7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982403405931:android:6eb7d853d88bc7be08792e",
+        "android_client_info": {
+          "package_name": "com.example.cash_in_group"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdnX6UgggCRj06vSQ7msgcTd_CCM45G7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

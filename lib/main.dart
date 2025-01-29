@@ -8,6 +8,7 @@ import 'package:cash_in_group/features/groups/features/group/data/group_reposito
 import 'package:cash_in_group/features/groups/features/group/presentation/widgets/group_screen.dart';
 import 'package:cash_in_group/features/groups/presentation/widgets/add_group_screen.dart';
 import 'package:cash_in_group/features/groups/presentation/widgets/groups_screen.dart';
+import 'package:cash_in_group/features/home/home_screen.dart';
 import 'package:cash_in_group/features/profile/data/users_repository.dart';
 import 'package:cash_in_group/features/profile/presentation/profile_screen.dart';
 import 'package:cash_in_group/firebase_options.dart';
@@ -30,7 +31,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => LoginScreen(),
+      builder: (context, state) => HomeScreen(),
       routes: [
         GoRoute(path: "login", builder: (context, state) => LoginScreen()),
         GoRoute(

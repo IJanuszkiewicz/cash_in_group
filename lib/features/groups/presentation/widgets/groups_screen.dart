@@ -37,6 +37,7 @@ class GroupsScreen extends StatelessWidget {
                     ? GroupTile(
                         groupName: state[index].name,
                         groupId: state[index].id,
+                        imageUrl: state[index].imageUrl,
                       )
                     : null,
               ),

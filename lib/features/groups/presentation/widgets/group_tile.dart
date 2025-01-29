@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class GroupTile extends StatelessWidget {
-  const GroupTile({required this.groupName, required this.groupId, super.key});
+  const GroupTile(
+      {required this.groupName,
+      required this.groupId,
+      super.key,
+      this.imageUrl});
 
   final String groupName;
   final String groupId;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +26,10 @@ class GroupTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
                 child: CircleAvatar(
-                  radius: 30,
-                  child: FlutterLogo(
-                    size: 40,
-                  ),
-                ),
+                    radius: 30,
+                    backgroundImage:
+                        imageUrl != null ? NetworkImage(imageUrl!) : null,
+                    child: imageUrl == null ? Icon(Icons.group) : null),
               ),
               Expanded(
                 child: Text(

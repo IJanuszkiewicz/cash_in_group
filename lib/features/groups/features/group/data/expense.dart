@@ -1,4 +1,3 @@
-import 'package:cash_in_group/core/model.dart';
 import 'package:decimal/decimal.dart';
 
 class Expense {
@@ -25,7 +24,6 @@ class Expense {
     );
   }
 
-  @override
   Map<String, Object> toJson() {
     return {
       'id': id,

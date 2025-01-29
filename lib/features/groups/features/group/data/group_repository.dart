@@ -13,6 +13,9 @@ abstract class GroupRepository {
   Future<Expense> addExpense(NewExpense newExpense);
   Future<Map<String, Decimal>> getBalances(String groupId);
   Future<bool> addMember(String groupId, String email);
+
+  Future<void> settle(
+      String fromId, String toId, Decimal amount, String groupId) async {}
 }
 
 class FirebaseGroupRepository implements GroupRepository {
@@ -133,6 +136,19 @@ class FirebaseGroupRepository implements GroupRepository {
       }).then((value) => true);
     });
   }
+
+  @override
+  Future<void> settle(
+      String fromId, String toId, Decimal amount, String groupId) async {
+    await addExpense(NewExpense(
+      groupId,
+      title: 'Settlement',
+      paidById: fromId,
+      amount: amount,
+      participantsIds: [toId],
+      date: DateTime.now(),
+    ));
+  }
 }
 
 class MockGroupRepository implements GroupRepository {
@@ -199,5 +215,11 @@ class MockGroupRepository implements GroupRepository {
     final user = Mocks.users.firstWhere((user) => user.email == email);
     details.members.add(user);
     return Future.value(true);
+  }
+
+  @override
+  Future<void> settle(
+      String fromId, String toId, Decimal amount, String groupId) async {
+    // TODO: implement settle
   }
 }

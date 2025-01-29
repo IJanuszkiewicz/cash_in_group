@@ -64,8 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () async {
-                      await authCubit.signInWithEmail(
-                          email.text, password.text);
+                      if (!email.text.isEmpty && !password.text.isEmpty) {
+                        await authCubit.signInWithEmail(
+                            email.text, password.text);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding:

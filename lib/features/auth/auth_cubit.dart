@@ -40,6 +40,8 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<String> get userName async => authService.userName();
+
   String get userUid => authService.currentUser!.uid;
 
   Future<void> signOut() async {

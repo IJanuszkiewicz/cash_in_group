@@ -27,7 +27,11 @@ class ExpensesScreen extends StatelessWidget {
           child: ListView.builder(itemBuilder: (buildContext, index) {
             final expenses = loadedState.grouped;
             if (index >= expenses.keys.length) return null;
-            final key = expenses.keys.toList()[index];
+            final keys = expenses.keys.toList();
+            keys
+              ..sort((t1, t2) =>
+                  t2.millisecondsSinceEpoch - t1.millisecondsSinceEpoch);
+            final key = keys[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -42,7 +46,6 @@ class ExpensesScreen extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 
   Widget _buildDateSeparator(DateTime date) {

@@ -22,6 +22,12 @@ class AuthService {
 
   String get userEmail => currentUser!.email!;
 
+  Future<String> userName() async {
+    return await usersRepository
+        .getUser(currentUser!.uid)
+        .then((value) => value!.name);
+  }
+
   User? get currentUser => firebaseAuth.currentUser;
 
   Future<SignInResult> signInWithEmail(String email, String password) async {
@@ -68,8 +74,11 @@ class AuthService {
       }
 
       usersRepository.addUser(credential.user!.uid, email, name);
+      return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
+    } catch (err) {
+      return "Error occurred";
     }
   }
 

@@ -11,6 +11,7 @@ import 'package:cash_in_group/features/groups/presentation/widgets/groups_screen
 import 'package:cash_in_group/features/home/home_screen.dart';
 import 'package:cash_in_group/features/profile/data/users_repository.dart';
 import 'package:cash_in_group/features/profile/presentation/profile_screen.dart';
+import 'package:cash_in_group/features/theme/theme_provider.dart';
 import 'package:cash_in_group/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +25,8 @@ void main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const _App());
+  runApp(ChangeNotifierProvider(
+      create: (context) => ThemeProvider(), child: const _App()));
 }
 
 final GoRouter _router = GoRouter(
@@ -97,6 +99,7 @@ class _AppState extends State<_App> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp.router(
       title: "CashInGroup",
       theme: ThemeData(
@@ -106,6 +109,14 @@ class _AppState extends State<_App> {
           brightness: Brightness.light,
         ),
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.pink,
+          brightness: Brightness.dark,
+        ),
+      ),
+      themeMode: themeProvider.themeMode,
       routerConfig: _router,
       builder: (context, child) {
         return FutureBuilder(

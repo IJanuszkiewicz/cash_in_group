@@ -55,7 +55,6 @@ class MembersScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                // Add user to the group
                 final email = emailController.text;
                 if (email.isNotEmpty) {
                   await groupCubit.addMember(email);

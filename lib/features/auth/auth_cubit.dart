@@ -48,8 +48,8 @@ class AuthCubit extends Cubit<AuthState> {
     emit(SignedOutState());
   }
 
-  Future<String?> trySignUp(String email, String password) =>
-      authService.signUpWithEmail(email, password);
+  Future<String?> trySignUp(String email, String password, String name) =>
+      authService.signUpWithEmail(email, password, name);
 
   @override
   Future<void> close() async {

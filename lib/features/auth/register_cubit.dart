@@ -6,12 +6,13 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   final AuthService authService;
 
-  Future<void> registerWithEmail(String email, String password) async {
+  Future<void> registerWithEmail(
+      String email, String password, String name) async {
     emit(RegisterState.loading());
     await Future<void>.delayed(const Duration(seconds: 1));
 
     try {
-      final result = await authService.signUpWithEmail(email, password);
+      final result = await authService.signUpWithEmail(email, password, name);
       if (result != null) {
         emit(RegisterState.error(result));
       } else {

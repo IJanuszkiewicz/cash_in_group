@@ -5,9 +5,9 @@ import 'package:decimal/decimal.dart';
 
 class Mocks {
   static final List<User> users = [
-    User("Tony Dripano", '0'),
-    User("Mario Pudzianini", '1'),
-    User("Ben Dover", '2')
+    User(name: "Tony Dripano", id: '0', email: 'tony@example.com'),
+    User(name: "Mario Pudzianini", id: '1', email: 'mario@example.com'),
+    User(name: "Ben Dover", id: '2', email: 'ben@example.com')
   ];
 
   static final List<GroupDetails> groups = [

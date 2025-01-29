@@ -52,7 +52,8 @@ class AuthService {
     }
   }
 
-  Future<String?> signUpWithEmail(String email, String password) async {
+  Future<String?> signUpWithEmail(
+      String email, String password, String name) async {
     try {
       if (isSignedIn) {
         await firebaseAuth.signOut();
@@ -66,7 +67,7 @@ class AuthService {
         return "Error occurred";
       }
 
-      usersRepository.addUser(credential.user!.uid, email);
+      usersRepository.addUser(credential.user!.uid, email, name);
     } on FirebaseAuthException catch (e) {
       return e.message;
     }

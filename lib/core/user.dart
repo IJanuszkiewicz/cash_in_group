@@ -1,24 +1,23 @@
-import 'package:cash_in_group/core/model.dart';
-
-class User extends Model<User> {
-  User(this.name, this.id);
+class User {
+  User({required this.name, required this.id, required this.email});
 
   final String name;
+  final String email;
   final String id;
 
-  @override
-  User fromJson(Map<String, Object> json) {
+  static User fromJson(Map<String, Object> json) {
     return User(
-      json['name'] as String,
-      json['id'] as String,
+      name: json['name'] as String,
+      id: json['id'] as String,
+      email: json['email'] as String,
     );
   }
 
-  @override
   Map<String, Object> toJson() {
     return {
       'name': name,
       'id': id,
+      'email': email,
     };
   }
 }

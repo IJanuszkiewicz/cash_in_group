@@ -5,7 +5,7 @@ abstract class UsersRepository {
   Future<User?> getUser(String userId);
   Future<void> updateUser(User user);
 
-  void addUser(String uid, String email) {}
+  void addUser(String uid, String email, String name) {}
 }
 
 class FirebaseUsersRepository implements UsersRepository {
@@ -20,8 +20,9 @@ class FirebaseUsersRepository implements UsersRepository {
   Future<User> getUser(String userId) {
     return _usersCollection.doc(userId).get().then((value) {
       return User(
-        value['name'],
-        value.id,
+        name: value['name'],
+        id: value.id,
+        email: value['email'],
       );
     });
   }
@@ -33,9 +34,10 @@ class FirebaseUsersRepository implements UsersRepository {
   }
 
   @override
-  void addUser(String uid, String email) {
+  void addUser(String uid, String email, String name) {
     _usersCollection.doc(uid).set({
       'email': email,
+      'name': name,
     });
   }
 }

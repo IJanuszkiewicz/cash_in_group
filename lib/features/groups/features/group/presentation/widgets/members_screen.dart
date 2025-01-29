@@ -1,7 +1,9 @@
 import 'package:cash_in_group/core/user.dart';
+import 'package:cash_in_group/features/groups/features/group/cubits/group_cubit.dart';
 import 'package:cash_in_group/features/groups/features/group/cubits/group_state.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MembersScreen extends StatelessWidget {
   const MembersScreen({super.key, required this.loadedState});
@@ -10,7 +12,14 @@ class MembersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var groupCubit = BlocProvider.of<GroupCubit>(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddUserDialog(context, groupCubit);
+        },
+        child: Icon(Icons.add),
+      ),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: ListView.builder(itemBuilder: (buildContext, index) {
@@ -23,6 +32,41 @@ class MembersScreen extends StatelessWidget {
           );
         }),
       ),
+    );
+  }
+
+  void _showAddUserDialog(BuildContext context, GroupCubit groupCubit) {
+    final emailController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add User'),
+          content: TextField(
+            controller: emailController,
+            decoration: InputDecoration(labelText: 'User email'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Add user to the group
+                final email = emailController.text;
+                if (email.isNotEmpty) {
+                  await groupCubit.addMember(email);
+                }
+                Navigator.of(context).pop();
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -49,8 +93,8 @@ class MemberTile extends StatelessWidget {
           ),
         ),
         title: Text(user.name),
-        trailing:
-            Text("${balances?[user.id]?.toStringAsFixed(2) ?? ""} $currency"),
+        trailing: Text(
+            "${balances?[user.id]?.toStringAsFixed(2) ?? "0.00"} $currency"),
       ),
     );
   }

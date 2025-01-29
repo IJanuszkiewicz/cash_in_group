@@ -12,6 +12,7 @@ abstract class GroupRepository {
   Future<GroupDetails?> getDetails(String groupId);
   Future<Expense> addExpense(NewExpense newExpense);
   Future<Map<String, Decimal>> getBalances(String groupId);
+  Future<bool> addMember(String groupId, String email);
 }
 
 class FirebaseGroupRepository implements GroupRepository {
@@ -100,7 +101,11 @@ class FirebaseGroupRepository implements GroupRepository {
     for (var member in groupSnapshot['members'] as List) {
       members
           .add(await _usersCollection.doc(member as String).get().then((value) {
-        return User(value['name'] as String, value.id);
+        return User(
+          name: value['name'] as String,
+          id: value.id,
+          email: value['email'] as String,
+        );
       }));
     }
     return groupDoc.get().then((value) {
@@ -112,6 +117,20 @@ class FirebaseGroupRepository implements GroupRepository {
         expenses: expenses,
         currency: value['currency'] as String,
       );
+    });
+  }
+
+  @override
+  Future<bool> addMember(String groupId, String email) {
+    return _usersCollection
+        .where('email', isEqualTo: email)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) return false;
+      final userId = value.docs.first.id;
+      return _groupsCollection.doc(groupId).update({
+        'members': FieldValue.arrayUnion([userId])
+      }).then((value) => true);
     });
   }
 }
@@ -172,5 +191,13 @@ class MockGroupRepository implements GroupRepository {
       }
     }
     return result;
+  }
+
+  @override
+  Future<bool> addMember(String groupId, String email) {
+    final details = Mocks.groups.firstWhere((group) => group.id == groupId);
+    final user = Mocks.users.firstWhere((user) => user.email == email);
+    details.members.add(user);
+    return Future.value(true);
   }
 }

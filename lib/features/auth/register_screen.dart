@@ -17,6 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final nameController = TextEditingController(); // Add this line
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: nameController, // Add this TextField
+                              decoration: InputDecoration(
+                                labelText: "Name",
+                                hintText: "Display Name",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -97,7 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 }
                                 context.read<RegisterCubit>().registerWithEmail(
                                     emailController.text,
-                                    passwordController.text);
+                                    passwordController.text,
+                                    nameController.text); // Pass the name here
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(

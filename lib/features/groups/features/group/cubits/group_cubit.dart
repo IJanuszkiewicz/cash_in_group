@@ -91,4 +91,22 @@ class GroupCubit extends Cubit<GroupState> {
 
     return settlements;
   }
+
+  Future<bool> addMember(String email) async {
+    if (state is GroupLoaded) {
+      final loadedState = state as GroupLoaded;
+      final details = loadedState.details;
+      final members = details.members;
+      if (members.any((element) => element.email == email)) {
+        return false;
+      }
+      final ret = await _groupRepository.addMember(groupId, email);
+      if (ret) {
+        reload();
+        return true;
+      }
+      return false;
+    }
+    throw Exception("Group not loaded");
+  }
 }

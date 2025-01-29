@@ -3,6 +3,7 @@ import 'package:cash_in_group/features/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,7 +17,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Welcome to Cash In Group!',
+                AppLocalizations.of(context)!.welcomeMessage,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
@@ -45,7 +46,7 @@ class HomeScreen extends StatelessWidget {
           );
         }),
       ),
-      title: 'Cash in Group',
+      title: AppLocalizations.of(context)!.cashInGroup,
     );
   }
 }

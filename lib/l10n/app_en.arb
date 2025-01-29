@@ -1,0 +1,7 @@
+{
+    "cashInGroup": "Cash In Group",
+    "@cashInGroup": {
+        "description": "App title"
+    },
+    "welcomeMessage": "Welcome to Cash In Group"
+}

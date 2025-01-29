@@ -17,11 +17,11 @@ class SettlementsScreen extends StatelessWidget {
     final settlements = loadedState.settlements;
 
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: settlements.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
-                "Everybody is settled!",
+                'Everybody is settled!',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -31,10 +31,10 @@ class SettlementsScreen extends StatelessWidget {
           : ListView.builder(
               itemCount: settlements.length,
               itemBuilder: (buildContext, index) {
-                var settlement = settlements[index];
-                var from = loadedState.details.members
+                final settlement = settlements[index];
+                final from = loadedState.details.members
                     .firstWhere((u) => u.id == settlement.from);
-                var to = loadedState.details.members
+                final to = loadedState.details.members
                     .firstWhere((u) => u.id == settlement.to);
                 return SettlementTile(
                   from: from,
@@ -50,13 +50,14 @@ class SettlementsScreen extends StatelessWidget {
 }
 
 class SettlementTile extends StatelessWidget {
-  const SettlementTile(
-      {super.key,
-      required this.from,
-      required this.to,
-      required this.amount,
-      required this.currency,
-      required this.groupId});
+  const SettlementTile({
+    super.key,
+    required this.from,
+    required this.to,
+    required this.amount,
+    required this.currency,
+    required this.groupId,
+  });
 
   final User from;
   final User to;
@@ -68,20 +69,21 @@ class SettlementTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-                "${from.name} owes ${to.name} ${amount.toStringAsFixed(2)} $currency"),
+              '${from.name} owes ${to.name} ${amount.toStringAsFixed(2)} $currency',
+            ),
             if (BlocProvider.of<AuthCubit>(context).userUid == from.id)
               ElevatedButton(
                 onPressed: () async {
                   await RepositoryProvider.of<GroupRepository>(context)
                       .settle(from.id, to.id, amount, groupId);
-                  BlocProvider.of<GroupCubit>(context).fetch();
+                  await BlocProvider.of<GroupCubit>(context).fetch();
                 },
-                child: Text("Settle"),
+                child: const Text('Settle'),
               ),
           ],
         ),

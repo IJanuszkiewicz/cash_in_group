@@ -20,47 +20,54 @@ class GroupScreen extends StatelessWidget {
       create: (context) =>
           GroupCubit(groupId, context.read<GroupRepository>())..fetch(),
       child: BlocBuilder<GroupCubit, GroupState>(
-          builder: (buildContext, state) => switch (state) {
-                GroupLoading() => BaseScreen(
-                    title: "Group details",
-                    child: Center(
-                        child: LoadingAnimationWidget.inkDrop(
-                            color: Colors.white, size: 40)),
-                  ),
-                GroupError(message: var m) => BaseScreen(
-                    title: 'Error',
-                    child: Center(
-                      child: Text(
-                        m,
-                      ),
-                    ),
-                  ),
-                GroupLoaded() => _loaded(state)
-              }),
+        builder: (buildContext, state) => switch (state) {
+          GroupLoading() => BaseScreen(
+              title: 'Group details',
+              child: Center(
+                child: LoadingAnimationWidget.inkDrop(
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+            ),
+          GroupError(message: final m) => BaseScreen(
+              title: 'Error',
+              child: Center(
+                child: Text(
+                  m,
+                ),
+              ),
+            ),
+          GroupLoaded() => _loaded(state)
+        },
+      ),
     );
   }
 
   Widget _loaded(GroupLoaded state) {
     return DefaultTabController(
-        length: 3,
-        child: BaseScreen(
-          title: state.details.name,
-          appBarBottom: TabBar(
-            tabs: [
-              Tab(text: "Expenses"),
-              Tab(
-                text: "Members",
-              ),
-              Tab(
-                text: "Settlements",
-              )
-            ],
-          ),
-          child: TabBarView(children: [
+      length: 3,
+      child: BaseScreen(
+        title: state.details.name,
+        appBarBottom: const TabBar(
+          tabs: [
+            Tab(text: 'Expenses'),
+            Tab(
+              text: 'Members',
+            ),
+            Tab(
+              text: 'Settlements',
+            ),
+          ],
+        ),
+        child: TabBarView(
+          children: [
             ExpensesScreen(loadedState: state),
             MembersScreen(loadedState: state),
             SettlementsScreen(loadedState: state),
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }

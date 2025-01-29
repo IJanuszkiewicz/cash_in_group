@@ -1,28 +1,33 @@
 import 'package:decimal/decimal.dart';
 
 class Expense {
-  Expense(this.id, this.title, this.paidById, this.amount, this.participantsIds,
-      this.groupId, this.date);
+  Expense(
+    this.id,
+    this.title,
+    this.paidById,
+    this.amount,
+    this.participantsIds,
+    this.groupId,
+    this.date,
+  );
 
-  final String id;
-  final String title;
-  final String paidById;
-  final Decimal amount;
-  final List<String> participantsIds;
-  final String groupId;
-  final DateTime date;
-
-  static Expense fromJson(Map<String, Object> json) {
-    return Expense(
-      json['id'] as String,
-      json['title'] as String,
-      json['paidBy'] as String,
-      Decimal.parse(json['amount'] as String),
-      List<String>.from(json['participants'] as List),
-      json['groupId'] as String,
-      DateTime.parse(json['date'] as String),
-    );
+  Expense.fromJson(Map<String, Object> json) {
+    id = json['id']! as String;
+    title = json['title']! as String;
+    paidById = json['paidBy']! as String;
+    amount = Decimal.parse(json['amount']! as String);
+    participantsIds = List<String>.from(json['participants']! as List);
+    groupId = json['groupId']! as String;
+    date = DateTime.parse(json['date']! as String);
   }
+
+  late final String id;
+  late final String title;
+  late final String paidById;
+  late final Decimal amount;
+  late final List<String> participantsIds;
+  late final String groupId;
+  late final DateTime date;
 
   Map<String, Object> toJson() {
     return {

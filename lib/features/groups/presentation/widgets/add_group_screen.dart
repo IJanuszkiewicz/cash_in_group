@@ -36,12 +36,12 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
         context.read<AuthService>(),
       ),
       child: BaseScreen(
-        title: "New Group",
+        title: 'New Group',
         child: BlocConsumer<NewGroupCubit, NewGroupState>(
           listener: (context, state) {
             if (state is NewGroupSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Group created successfully!')),
+                const SnackBar(content: Text('Group created successfully!')),
               );
               GoRouter.of(context).go('/groups');
             } else if (state is NewGroupFailure) {
@@ -52,29 +52,29 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
           },
           builder: (context, state) {
             if (state is NewGroupLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             return Form(
               key: _formKey,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         elevation: 4,
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Group Details",
+                              const Text(
+                                'Group Details',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -84,8 +84,8 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                               TextFormField(
                                 controller: groupNameController,
                                 decoration: InputDecoration(
-                                  labelText: "Group Name",
-                                  hintText: "ex. Family",
+                                  labelText: 'Group Name',
+                                  hintText: 'ex. Family',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -103,8 +103,8 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                               TextFormField(
                                 controller: currencyController,
                                 decoration: InputDecoration(
-                                  labelText: "Currency",
-                                  hintText: "ex. USD",
+                                  labelText: 'Currency',
+                                  hintText: 'ex. USD',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -121,14 +121,14 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                               const SizedBox(height: 16),
                               ElevatedButton(
                                 onPressed: _pickImage,
-                                child: Text('Upload Group Image'),
+                                child: const Text('Upload Group Image'),
                               ),
                               if (_imageFile != null)
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
+                                  padding: const EdgeInsets.only(top: 8),
                                   child: Text(
                                     'Selected image: ${_imageFile!.name}',
-                                    style: TextStyle(fontSize: 16),
+                                    style: const TextStyle(fontSize: 16),
                                   ),
                                 ),
                               const SizedBox(height: 16),
@@ -139,18 +139,25 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                                       final groupName =
                                           groupNameController.text;
                                       final currency = currencyController.text;
-                                      context.read<NewGroupCubit>().createGroup(
-                                          groupName, currency, _imageFile);
+                                      await context
+                                          .read<NewGroupCubit>()
+                                          .createGroup(
+                                            groupName,
+                                            currency,
+                                            _imageFile,
+                                          );
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 32, vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 32,
+                                      vertical: 12,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: Text("Create Group"),
+                                  child: const Text('Create Group'),
                                 ),
                               ),
                             ],

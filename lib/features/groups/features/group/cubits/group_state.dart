@@ -8,12 +8,13 @@ sealed class GroupState {}
 class GroupLoading extends GroupState {}
 
 class GroupLoaded extends GroupState {
-  GroupLoaded(
-      {required this.settlements,
-      required this.details,
-      required this.balances}) {
+  GroupLoaded({
+    required this.settlements,
+    required this.details,
+    required this.balances,
+  }) {
     grouped = {};
-    for (var expense in details.expenses) {
+    for (final expense in details.expenses) {
       final key =
           DateTime(expense.date.year, expense.date.month, expense.date.day);
       if (grouped.containsKey(key)) {
@@ -22,9 +23,10 @@ class GroupLoaded extends GroupState {
         grouped.putIfAbsent(key, () => [expense]);
       }
     }
-    for (var key in grouped.keys) {
-      grouped[key]!.sort((a, b) =>
-          b.date.millisecondsSinceEpoch - a.date.millisecondsSinceEpoch);
+    for (final key in grouped.keys) {
+      grouped[key]!.sort(
+        (a, b) => b.date.millisecondsSinceEpoch - a.date.millisecondsSinceEpoch,
+      );
     }
   }
 
@@ -35,7 +37,6 @@ class GroupLoaded extends GroupState {
 }
 
 class GroupError extends GroupState {
-  final String message;
-
   GroupError(this.message);
+  final String message;
 }

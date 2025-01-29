@@ -2,25 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  static const String _themeModeKey = 'themeMode';
-  ThemeMode _themeMode = ThemeMode.system;
-
   ThemeProvider() {
     _loadThemeMode();
   }
+  static const String _themeModeKey = 'themeMode';
+  ThemeMode _themeMode = ThemeMode.system;
 
   ThemeMode get themeMode => _themeMode;
 
-  void setThemeData(ThemeMode themeMode) async {
+  Future<void> setThemeData(ThemeMode themeMode) async {
     _themeMode = themeMode;
     notifyListeners();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(_themeModeKey, themeMode.toString());
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_themeModeKey, themeMode.toString());
   }
 
-  void _loadThemeMode() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? themeModeString = prefs.getString(_themeModeKey);
+  Future<void> _loadThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final themeModeString = prefs.getString(_themeModeKey);
     if (themeModeString != null) {
       _themeMode = ThemeMode.values.firstWhere(
         (mode) => mode.toString() == themeModeString,

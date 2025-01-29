@@ -15,20 +15,23 @@ abstract class GroupRepository {
   Future<bool> addMember(String groupId, String email);
 
   Future<void> settle(
-      String fromId, String toId, Decimal amount, String groupId) async {}
+    String fromId,
+    String toId,
+    Decimal amount,
+    String groupId,
+  ) async {}
 }
 
 class FirebaseGroupRepository implements GroupRepository {
+  FirebaseGroupRepository() : _firestore = FirebaseFirestore.instance {
+    _groupsCollection = _firestore.collection(groupsCollection);
+    _usersCollection = _firestore.collection('users');
+  }
   final FirebaseFirestore _firestore;
   late final CollectionReference _groupsCollection;
   late final CollectionReference _usersCollection;
 
   static const String groupsCollection = 'groups';
-
-  FirebaseGroupRepository() : _firestore = FirebaseFirestore.instance {
-    _groupsCollection = _firestore.collection(groupsCollection);
-    _usersCollection = _firestore.collection('users');
-  }
 
   @override
   Future<Expense> addExpense(NewExpense newExpense) {
@@ -62,16 +65,20 @@ class FirebaseGroupRepository implements GroupRepository {
         .get()
         .then((value) {
       final result = <String, Decimal>{};
-      for (var expense in value.docs) {
-        var curr = result.putIfAbsent(
-            expense['paidBy'] as String, () => Decimal.fromInt(0));
+      for (final expense in value.docs) {
+        final curr = result.putIfAbsent(
+          expense['paidBy'] as String,
+          () => Decimal.fromInt(0),
+        );
         result[expense['paidBy'] as String] =
             curr + Decimal.parse(expense['amount'].toString());
-        var splitValue = Decimal.parse(expense['amount'].toString()) /
+        final splitValue = Decimal.parse(expense['amount'].toString()) /
             Decimal.fromInt((expense['participants'] as List).length);
-        for (var participantId in expense['participants'] as List) {
-          var value = result.putIfAbsent(
-              participantId as String, () => Decimal.fromInt(0));
+        for (final participantId in expense['participants'] as List) {
+          final value = result.putIfAbsent(
+            participantId as String,
+            () => Decimal.fromInt(0),
+          );
           result[participantId] =
               value - splitValue.toDecimal(scaleOnInfinitePrecision: 10);
         }
@@ -101,18 +108,21 @@ class FirebaseGroupRepository implements GroupRepository {
 
     final groupSnapshot = await groupDoc.get();
     final members = <User>[];
-    for (var member in groupSnapshot['members'] as List) {
-      members
-          .add(await _usersCollection.doc(member as String).get().then((value) {
-        return User(
-          name: value['name'] as String,
-          id: value.id,
-          email: value['email'] as String,
-        );
-      }));
+    for (final member in groupSnapshot['members'] as List) {
+      members.add(
+        await _usersCollection.doc(member as String).get().then((value) {
+          return User(
+            name: value['name'] as String,
+            id: value.id,
+            email: value['email'] as String,
+          );
+        }),
+      );
     }
     return groupDoc.get().then((value) {
-      if (!value.exists) return null;
+      if (!value.exists) {
+        return null;
+      }
       return GroupDetails(
         id: value.id,
         name: value['name'] as String,
@@ -129,34 +139,44 @@ class FirebaseGroupRepository implements GroupRepository {
         .where('email', isEqualTo: email)
         .get()
         .then((value) {
-      if (value.docs.isEmpty) return false;
+      if (value.docs.isEmpty) {
+        return false;
+      }
       final userId = value.docs.first.id;
       return _groupsCollection.doc(groupId).update({
-        'members': FieldValue.arrayUnion([userId])
+        'members': FieldValue.arrayUnion([userId]),
       }).then((value) => true);
     });
   }
 
   @override
   Future<void> settle(
-      String fromId, String toId, Decimal amount, String groupId) async {
-    await addExpense(NewExpense(
-      groupId,
-      title: 'Settlement',
-      paidById: fromId,
-      amount: amount,
-      participantsIds: [toId],
-      date: DateTime.now(),
-    ));
+    String fromId,
+    String toId,
+    Decimal amount,
+    String groupId,
+  ) async {
+    await addExpense(
+      NewExpense(
+        groupId,
+        title: 'Settlement',
+        paidById: fromId,
+        amount: amount,
+        participantsIds: [toId],
+        date: DateTime.now(),
+      ),
+    );
   }
 }
 
 class MockGroupRepository implements GroupRepository {
   @override
   Future<GroupDetails?> getDetails(String groupId) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     final index = Mocks.groups.indexWhere((group) => group.id == groupId);
-    if (index == -1) return null;
+    if (index == -1) {
+      return null;
+    }
     return Mocks.groups[index];
   }
 
@@ -169,7 +189,7 @@ class MockGroupRepository implements GroupRepository {
         newExpense.participantsIds == null ||
         newExpense.participantsIds!.isEmpty ||
         newExpense.date == null) {
-      throw Exception("Invalid data");
+      throw Exception('Invalid data');
     }
     final expense = Expense(
       Random().nextInt(1000000000).toString(),
@@ -182,7 +202,7 @@ class MockGroupRepository implements GroupRepository {
     );
     final details = await getDetails(newExpense.groupId);
     if (details == null) {
-      throw Exception("Group not found");
+      throw Exception('Group not found');
     }
     details.expenses.add(expense);
     return expense;
@@ -192,16 +212,18 @@ class MockGroupRepository implements GroupRepository {
   Future<Map<String, Decimal>> getBalances(String groupId) async {
     final details = await getDetails(groupId);
     if (details == null) {
-      throw Exception("Group not found");
+      throw Exception('Group not found');
     }
     final result = <String, Decimal>{};
-    for (var expense in details.expenses) {
-      var curr = result.putIfAbsent(expense.paidById, () => Decimal.fromInt(0));
+    for (final expense in details.expenses) {
+      final curr =
+          result.putIfAbsent(expense.paidById, () => Decimal.fromInt(0));
       result[expense.paidById] = curr + expense.amount;
-      var splitValue =
+      final splitValue =
           expense.amount / Decimal.fromInt(expense.participantsIds.length);
-      for (var participantId in expense.participantsIds) {
-        var value = result.putIfAbsent(participantId, () => Decimal.fromInt(0));
+      for (final participantId in expense.participantsIds) {
+        final value =
+            result.putIfAbsent(participantId, () => Decimal.fromInt(0));
         result[participantId] = value -
             splitValue.toDecimal(scaleOnInfinitePrecision: 10); // rounding here
       }
@@ -219,7 +241,11 @@ class MockGroupRepository implements GroupRepository {
 
   @override
   Future<void> settle(
-      String fromId, String toId, Decimal amount, String groupId) async {
+    String fromId,
+    String toId,
+    Decimal amount,
+    String groupId,
+  ) async {
     // TODO: implement settle
   }
 }

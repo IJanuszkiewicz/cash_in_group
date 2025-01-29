@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return BlocProvider(
       create: (context) => RegisterCubit(authService: authCubit.authService),
       child: BaseScreen(
-        title: "Register",
+        title: 'Register',
         child: BlocBuilder<RegisterCubit, RegisterState>(
           builder: (context, state) {
             if (state.isSuccess) {
@@ -34,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Form(
                   key: _formKey,
                   child: ListView(
@@ -42,8 +42,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         controller: nameController,
                         decoration: InputDecoration(
-                          labelText: "Name",
-                          hintText: "Display Name",
+                          labelText: 'Name',
+                          hintText: 'Display Name',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -59,8 +59,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
-                          labelText: "Email",
-                          hintText: "Email address",
+                          labelText: 'Email',
+                          hintText: 'Email address',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -80,8 +80,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         controller: passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
-                          labelText: "Password",
-                          hintText: "Password",
+                          labelText: 'Password',
+                          hintText: 'Password',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -101,8 +101,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         controller: confirmPasswordController,
                         obscureText: true,
                         decoration: InputDecoration(
-                          labelText: "Confirm Password",
-                          hintText: "Confirm Password",
+                          labelText: 'Confirm Password',
+                          hintText: 'Confirm Password',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -121,32 +121,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            context.read<RegisterCubit>().registerWithEmail(
-                                emailController.text,
-                                passwordController.text,
-                                nameController.text);
+                            await context
+                                .read<RegisterCubit>()
+                                .registerWithEmail(
+                                  emailController.text,
+                                  passwordController.text,
+                                  nameController.text,
+                                );
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 12,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text("Register"),
+                        child: const Text('Register'),
                       ),
                       const SizedBox(height: 16),
                       if (state.error != null) ...[
                         Text(
                           state.error!,
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
                         const SizedBox(height: 16),
                       ] else if (state.isLoading) ...[
                         LoadingAnimationWidget.inkDrop(
-                            size: 40, color: Colors.white),
-                      ]
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ],
                     ],
                   ),
                 ),

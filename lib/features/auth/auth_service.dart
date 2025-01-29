@@ -10,8 +10,10 @@ enum SignInResult {
 }
 
 class AuthService {
-  const AuthService(
-      {required this.usersRepository, required this.firebaseAuth});
+  const AuthService({
+    required this.usersRepository,
+    required this.firebaseAuth,
+  });
 
   final FirebaseAuth firebaseAuth;
   final UsersRepository usersRepository;
@@ -23,7 +25,7 @@ class AuthService {
   String get userEmail => currentUser!.email!;
 
   Future<String> userName() async {
-    return await usersRepository
+    return usersRepository
         .getUser(currentUser!.uid)
         .then((value) => value!.name);
   }
@@ -59,7 +61,10 @@ class AuthService {
   }
 
   Future<String?> signUpWithEmail(
-      String email, String password, String name) async {
+    String email,
+    String password,
+    String name,
+  ) async {
     try {
       if (isSignedIn) {
         await firebaseAuth.signOut();
@@ -70,7 +75,7 @@ class AuthService {
         password: password,
       );
       if (credential.user == null) {
-        return "Error occurred";
+        return 'Error occurred';
       }
 
       usersRepository.addUser(credential.user!.uid, email, name);
@@ -78,7 +83,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       return e.message;
     } catch (err) {
-      return "Error occurred";
+      return 'Error occurred';
     }
   }
 

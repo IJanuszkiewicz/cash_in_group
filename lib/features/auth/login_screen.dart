@@ -2,9 +2,9 @@ import 'package:cash_in_group/core/widgets/base_screen.dart';
 import 'package:cash_in_group/features/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,19 +22,19 @@ class _LoginScreenState extends State<LoginScreen> {
     final authCubit = context.watch<AuthCubit>();
     final state = authCubit.state;
     return BaseScreen(
-      title: "CashInGroup",
+      title: 'CashInGroup',
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     AppLocalizations.of(context)!.welcomeMessage,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -43,8 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     controller: email,
                     decoration: InputDecoration(
-                      labelText: "Email",
-                      hintText: "Email address",
+                      labelText: 'Email',
+                      hintText: 'Email address',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -55,8 +55,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: password,
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Password",
-                      hintText: "Password",
+                      labelText: 'Password',
+                      hintText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -65,19 +65,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () async {
-                      if (!email.text.isEmpty && !password.text.isEmpty) {
+                      if (email.text.isNotEmpty && password.text.isNotEmpty) {
                         await authCubit.signInWithEmail(
-                            email.text, password.text);
+                          email.text,
+                          password.text,
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Text("Log in"),
+                    child: const Text('Log in'),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
@@ -85,25 +89,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       context.go('/register');
                     },
                     style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Text("Register"),
+                    child: const Text('Register'),
                   ),
                   const SizedBox(height: 16),
                   if (state is SignedOutState && state.error != null) ...[
                     Text(
                       state.error!,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                     const SizedBox(height: 16),
                   ] else if (state is SigningInState) ...[
                     LoadingAnimationWidget.inkDrop(
-                        size: 40, color: Colors.white),
-                  ]
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ],
                 ],
               ),
             ),

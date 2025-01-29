@@ -11,9 +11,7 @@ class GroupsCubit extends Cubit<List<Group>?> {
   final String _userId;
 
   void _listenToGroups() {
-    _groupRepository.getUsersGroupsStream(_userId).listen((groups) {
-      emit(groups);
-    });
+    _groupRepository.getUsersGroupsStream(_userId).listen(emit);
   }
 
   Future<void> fetch() async {

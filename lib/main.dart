@@ -18,67 +18,84 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(), child: const _App()));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const _App(),
+    ),
+  );
 }
 
 final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => HomeScreen(),
+      builder: (context, state) => const HomeScreen(),
       routes: [
-        GoRoute(path: "login", builder: (context, state) => LoginScreen()),
         GoRoute(
-            path: "register", builder: (context, state) => RegisterScreen()),
-        GoRoute(path: 'profile', builder: (context, state) => ProfileScreen()),
+          path: 'login',
+          builder: (context, state) => const LoginScreen(),
+        ),
         GoRoute(
-            path: 'groups',
-            builder: (context, state) => GroupsScreen(),
-            routes: [
-              GoRoute(
-                  path: 'new', builder: (context, state) => AddGroupScreen()),
-              GoRoute(
-                path: '/:groupId',
-                builder: (context, state) {
-                  final groupId = state.pathParameters['groupId'];
-                  if (groupId == null) throw Exception("there should be id");
-                  return GroupScreen(groupId: groupId);
-                },
-                routes: [
-                  GoRoute(
-                    path: '/new_expense',
-                    builder: (context, state) {
-                      final groupId = state.pathParameters['groupId'];
-                      if (groupId == null) {
-                        throw Exception("there should be id");
-                      }
-                      return AddExpenseScreen(groupId: groupId);
-                    },
-                  ),
-                ],
-              )
-            ])
+          path: 'register',
+          builder: (context, state) => const RegisterScreen(),
+        ),
+        GoRoute(
+          path: 'profile',
+          builder: (context, state) => const ProfileScreen(),
+        ),
+        GoRoute(
+          path: 'groups',
+          builder: (context, state) => const GroupsScreen(),
+          routes: [
+            GoRoute(
+              path: 'new',
+              builder: (context, state) => const AddGroupScreen(),
+            ),
+            GoRoute(
+              path: '/:groupId',
+              builder: (context, state) {
+                final groupId = state.pathParameters['groupId'];
+                if (groupId == null) {
+                  throw Exception('there should be id');
+                }
+                return GroupScreen(groupId: groupId);
+              },
+              routes: [
+                GoRoute(
+                  path: '/new_expense',
+                  builder: (context, state) {
+                    final groupId = state.pathParameters['groupId'];
+                    if (groupId == null) {
+                      throw Exception('there should be id');
+                    }
+                    return AddExpenseScreen(groupId: groupId);
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ],
     ),
   ],
-  redirect: (BuildContext context, GoRouterState state) async {
-    final bool loggedIn = BlocProvider.of<AuthCubit>(context).isSignedIn();
-    final bool loggingIn = state.matchedLocation == "/login";
-    final bool signingIn = state.matchedLocation == "/register";
+  redirect: (context, state) async {
+    final loggedIn = BlocProvider.of<AuthCubit>(context).isSignedIn();
+    final loggingIn = state.matchedLocation == '/login';
+    final signingIn = state.matchedLocation == '/register';
     if (!loggedIn) {
       if (signingIn) {
-        return "/register";
+        return '/register';
       }
-      return "/login";
+      return '/login';
     }
     if (loggingIn || signingIn) {
       return '/groups';
@@ -102,12 +119,11 @@ class _AppState extends State<_App> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp.router(
-      title: "CashInGroup",
+      title: 'CashInGroup',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.pink,
-          brightness: Brightness.light,
         ),
       ),
       darkTheme: ThemeData(
@@ -142,7 +158,8 @@ class _AppState extends State<_App> {
                       create: (_) => FirebaseGroupsRepository(),
                     ),
                     RepositoryProvider<UsersRepository>(
-                        create: (_) => FirebaseUsersRepository()),
+                      create: (_) => FirebaseUsersRepository(),
+                    ),
                   ],
                   child: MultiProvider(
                     providers: [
@@ -155,10 +172,10 @@ class _AppState extends State<_App> {
                       BlocProvider(
                         create: (context) =>
                             AuthCubit(authService: context.read()),
-                      )
+                      ),
                     ],
                     child: BlocListener<AuthCubit, AuthState>(
-                      listener: (BuildContext context, AuthState state) {
+                      listener: (context, state) {
                         _router.refresh();
                       },
                       child: child,

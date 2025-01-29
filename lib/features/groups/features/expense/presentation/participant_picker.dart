@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ParticipantPicker extends StatelessWidget {
-  const ParticipantPicker(
-      {required this.participants, required this.users, super.key});
+  const ParticipantPicker({
+    required this.participants,
+    required this.users,
+    super.key,
+  });
 
   final List<User> users;
   final List<String> participants;
@@ -22,7 +25,9 @@ class ParticipantPicker extends StatelessWidget {
                   title: Text(u.name),
                   value: participants.contains(u.id),
                   onChanged: (value) {
-                    if (value == null) return;
+                    if (value == null) {
+                      return;
+                    }
                     if (value) {
                       newExpenseCubit.addParticipant(u.id);
                     } else {
@@ -30,7 +35,7 @@ class ParticipantPicker extends StatelessWidget {
                     }
                   },
                 ),
-                Divider()
+                const Divider(),
               ],
             ),
           )

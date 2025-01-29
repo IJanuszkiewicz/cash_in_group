@@ -9,20 +9,19 @@ abstract class UsersRepository {
 }
 
 class FirebaseUsersRepository implements UsersRepository {
-  final FirebaseFirestore _firestore;
-  late final CollectionReference _usersCollection;
-
   FirebaseUsersRepository() : _firestore = FirebaseFirestore.instance {
     _usersCollection = _firestore.collection('users');
   }
+  final FirebaseFirestore _firestore;
+  late final CollectionReference _usersCollection;
 
   @override
   Future<User> getUser(String userId) {
     return _usersCollection.doc(userId).get().then((value) {
       return User(
-        name: value['name'],
+        name: value['name'] as String,
         id: value.id,
-        email: value['email'],
+        email: value['email'] as String,
       );
     });
   }

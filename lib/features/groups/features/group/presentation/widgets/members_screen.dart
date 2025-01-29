@@ -12,46 +12,50 @@ class MembersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var groupCubit = BlocProvider.of<GroupCubit>(context);
+    final groupCubit = BlocProvider.of<GroupCubit>(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showAddUserDialog(context, groupCubit);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: Padding(
-        padding: EdgeInsets.all(10),
-        child: ListView.builder(itemBuilder: (buildContext, index) {
-          final members = loadedState.details.members;
-          if (index >= members.length) return null;
-          return MemberTile(
-            user: members[index],
-            balances: loadedState.balances,
-            currency: loadedState.details.currency,
-          );
-        }),
+        padding: const EdgeInsets.all(10),
+        child: ListView.builder(
+          itemBuilder: (buildContext, index) {
+            final members = loadedState.details.members;
+            if (index >= members.length) {
+              return null;
+            }
+            return MemberTile(
+              user: members[index],
+              balances: loadedState.balances,
+              currency: loadedState.details.currency,
+            );
+          },
+        ),
       ),
     );
   }
 
   void _showAddUserDialog(BuildContext context, GroupCubit groupCubit) {
     final emailController = TextEditingController();
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add User'),
+          title: const Text('Add User'),
           content: TextField(
             controller: emailController,
-            decoration: InputDecoration(labelText: 'User email'),
+            decoration: const InputDecoration(labelText: 'User email'),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () async {
@@ -61,7 +65,7 @@ class MembersScreen extends StatelessWidget {
                 }
                 Navigator.of(context).pop();
               },
-              child: Text('Add'),
+              child: const Text('Add'),
             ),
           ],
         );
@@ -71,11 +75,12 @@ class MembersScreen extends StatelessWidget {
 }
 
 class MemberTile extends StatelessWidget {
-  const MemberTile(
-      {required this.user,
-      required this.balances,
-      required this.currency,
-      super.key});
+  const MemberTile({
+    required this.user,
+    required this.balances,
+    required this.currency,
+    super.key,
+  });
 
   final User user;
   final Map<String, Decimal>? balances;
@@ -85,7 +90,7 @@ class MemberTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: CircleAvatar(
+        leading: const CircleAvatar(
           radius: 20,
           child: FlutterLogo(
             size: 30,
@@ -93,7 +98,8 @@ class MemberTile extends StatelessWidget {
         ),
         title: Text(user.name),
         trailing: Text(
-            "${balances?[user.id]?.toStringAsFixed(2) ?? "0.00"} $currency"),
+          "${balances?[user.id]?.toStringAsFixed(2) ?? "0.00"} $currency",
+        ),
       ),
     );
   }

@@ -14,36 +14,42 @@ class GroupsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthCubit authCubit = context.read<AuthCubit>();
+    final authCubit = context.read<AuthCubit>();
     return BlocProvider(
       create: (context) =>
           GroupsCubit(context.read<GroupsRepository>(), authCubit.userUid)
             ..fetch(),
       child: BaseScreen(
         floatingActionButton: FloatingActionButton(
-            onPressed: () => context.go('/groups/new'), child: Icon(Icons.add)),
-        title: "Groups",
+          onPressed: () => context.go('/groups/new'),
+          child: const Icon(Icons.add),
+        ),
+        title: 'Groups',
         child: BlocBuilder<GroupsCubit, List<Group>?>(
-            builder: (BuildContext context, List<Group>? state) {
-          if (state == null) {
-            return Center(
+          builder: (context, state) {
+            if (state == null) {
+              return Center(
                 child: LoadingAnimationWidget.inkDrop(
-                    color: Colors.white, size: 40));
-          } else {
-            return RefreshIndicator(
-              onRefresh: () => context.read<GroupsCubit>().fetch(),
-              child: ListView.builder(
-                itemBuilder: (buildContext, index) => state.length > index
-                    ? GroupTile(
-                        groupName: state[index].name,
-                        groupId: state[index].id,
-                        imageUrl: state[index].imageUrl,
-                      )
-                    : null,
-              ),
-            );
-          }
-        }),
+                  color: Colors.white,
+                  size: 40,
+                ),
+              );
+            } else {
+              return RefreshIndicator(
+                onRefresh: () => context.read<GroupsCubit>().fetch(),
+                child: ListView.builder(
+                  itemBuilder: (buildContext, index) => state.length > index
+                      ? GroupTile(
+                          groupName: state[index].name,
+                          groupId: state[index].id,
+                          imageUrl: state[index].imageUrl,
+                        )
+                      : null,
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

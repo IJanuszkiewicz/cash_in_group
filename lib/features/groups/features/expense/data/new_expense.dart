@@ -1,13 +1,6 @@
 import 'package:decimal/decimal.dart';
 
 class NewExpense {
-  String? title;
-  String? paidById;
-  Decimal? amount;
-  List<String>? participantsIds;
-  String groupId;
-  DateTime? date;
-
   NewExpense(
     this.groupId, {
     this.title,
@@ -16,4 +9,10 @@ class NewExpense {
     this.participantsIds,
     this.date,
   });
+  String? title;
+  String? paidById;
+  Decimal? amount;
+  List<String>? participantsIds;
+  String groupId;
+  DateTime? date;
 }

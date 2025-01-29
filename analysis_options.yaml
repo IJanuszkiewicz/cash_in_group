@@ -1,5 +1,9 @@
-include:
-  - package:leancode_lint/analysis_options.yaml
+include: package:leancode_lint/analysis_options.yaml
+
+custom_lint:
+  rules:
+  - add_cubit_suffix_for_your_cubits: true
+
 
 analyzer:
   plugins:

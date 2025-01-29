@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:cash_in_group/features/auth/auth_service.dart';
 import 'package:cash_in_group/features/groups/data/groups_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class NewGroupCubit extends Cubit<NewGroupState> {
   NewGroupCubit(this.groupsRepository, this.authService)
@@ -21,12 +22,15 @@ class NewGroupCubit extends Cubit<NewGroupState> {
       final snapshot = await uploadTask.whenComplete(() {});
       return await snapshot.ref.getDownloadURL();
     } catch (err) {
-      print('Error uploading image: $err');
       return null;
     }
   }
 
-  void createGroup(String groupName, String currency, XFile? groupImage) async {
+  Future<void> createGroup(
+    String groupName,
+    String currency,
+    XFile? groupImage,
+  ) async {
     emit(NewGroupLoading());
     try {
       String? imageUrl;

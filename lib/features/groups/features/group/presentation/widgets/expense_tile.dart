@@ -11,15 +11,15 @@ class ExpenseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: CircleAvatar(
+        leading: const CircleAvatar(
           radius: 30,
           child: FlutterLogo(
             size: 40,
           ),
         ),
         title: Text(expense.title),
-        subtitle: Text("${expense.amount.toStringAsFixed(2)} $currency"),
-        trailing: Image.network("https://picsum.photos/250?image=9"),
+        subtitle: Text('${expense.amount.toStringAsFixed(2)} $currency'),
+        trailing: Image.network('https://picsum.photos/250?image=9'),
       ),
     );
   }

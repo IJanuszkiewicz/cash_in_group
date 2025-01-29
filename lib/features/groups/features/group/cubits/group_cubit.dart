@@ -17,16 +17,18 @@ class GroupCubit extends Cubit<GroupState> {
   Future<void> reload() async {
     final details = await _groupRepository.getDetails(groupId);
     if (details == null) {
-      emit(GroupError("Group not found"));
+      emit(GroupError('Group not found'));
       return;
     }
-    var balances = await _groupRepository.getBalances(groupId);
-    var settlements = calculateSettlements(balances);
-    emit(GroupLoaded(
-      details: details,
-      balances: balances,
-      settlements: settlements,
-    ));
+    final balances = await _groupRepository.getBalances(groupId);
+    final settlements = calculateSettlements(balances);
+    emit(
+      GroupLoaded(
+        details: details,
+        balances: balances,
+        settlements: settlements,
+      ),
+    );
   }
 
   List<Settlement> calculateSettlements(Map<String, Decimal> balances) {
@@ -40,7 +42,7 @@ class GroupCubit extends Cubit<GroupState> {
       }
     });
 
-    final List<Settlement> settlements = [];
+    final settlements = <Settlement>[];
     final creditorsSorted = creditors.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     final debtorsSorted = debtors.entries.toList()
@@ -48,12 +50,12 @@ class GroupCubit extends Cubit<GroupState> {
 
     while (creditorsSorted.isNotEmpty && debtorsSorted.isNotEmpty) {
       if (creditorsSorted.isEmpty &&
-          debtorsSorted.first.value.abs() > Decimal.parse("0.01")) {
-        throw Exception("Error while calculating settlements");
+          debtorsSorted.first.value.abs() > Decimal.parse('0.01')) {
+        throw Exception('Error while calculating settlements');
       }
       if (debtorsSorted.isEmpty &&
-          creditorsSorted.first.value.abs() > Decimal.parse("0.01")) {
-        throw Exception("Error while calculating settlements");
+          creditorsSorted.first.value.abs() > Decimal.parse('0.01')) {
+        throw Exception('Error while calculating settlements');
       }
 
       final creditor = creditorsSorted.first;
@@ -102,11 +104,11 @@ class GroupCubit extends Cubit<GroupState> {
       }
       final ret = await _groupRepository.addMember(groupId, email);
       if (ret) {
-        reload();
+        await reload();
         return true;
       }
       return false;
     }
-    throw Exception("Group not loaded");
+    throw Exception('Group not loaded');
   }
 }

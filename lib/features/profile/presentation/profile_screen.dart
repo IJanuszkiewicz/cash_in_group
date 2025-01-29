@@ -19,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
           return BaseScreen(
             title: 'Profile',
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -27,17 +27,19 @@ class ProfileScreen extends StatelessWidget {
                     future: authCubit.userName,
                     builder: (context, s) => Text(
                       'Name: ${s.data}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Email: ${state.email}',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 16),
-                  Text(
+                  const Text(
                     'Theme',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
@@ -46,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                     leading: Radio<ThemeMode>(
                       value: ThemeMode.system,
                       groupValue: themeProvider.themeMode,
-                      onChanged: (ThemeMode? value) {
+                      onChanged: (value) {
                         themeProvider.setThemeData(value!);
                       },
                     ),
@@ -56,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
                     leading: Radio<ThemeMode>(
                       value: ThemeMode.light,
                       groupValue: themeProvider.themeMode,
-                      onChanged: (ThemeMode? value) {
+                      onChanged: (value) {
                         themeProvider.setThemeData(value!);
                       },
                     ),
@@ -66,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
                     leading: Radio<ThemeMode>(
                       value: ThemeMode.dark,
                       groupValue: themeProvider.themeMode,
-                      onChanged: (ThemeMode? value) {
+                      onChanged: (value) {
                         themeProvider.setThemeData(value!);
                       },
                     ),
@@ -74,10 +76,8 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        authCubit.signOut();
-                      },
-                      child: Text("Sign out"),
+                      onPressed: authCubit.signOut,
+                      child: const Text('Sign out'),
                     ),
                   ),
                 ],
@@ -85,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           );
         } else {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

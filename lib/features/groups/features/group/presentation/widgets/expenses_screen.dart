@@ -20,29 +20,36 @@ class ExpensesScreen extends StatelessWidget {
           onPressed: () {
             context.go('/groups/${loadedState.details.id}/new_expense');
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
         body: Padding(
-          padding: EdgeInsets.all(10),
-          child: ListView.builder(itemBuilder: (buildContext, index) {
-            final expenses = loadedState.grouped;
-            if (index >= expenses.keys.length) return null;
-            final keys = expenses.keys.toList();
-            keys
-              ..sort((t1, t2) =>
-                  t2.millisecondsSinceEpoch - t1.millisecondsSinceEpoch);
-            final key = keys[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildDateSeparator(key),
-                ...expenses[key]!.map((expense) => ExpenseTile(
+          padding: const EdgeInsets.all(10),
+          child: ListView.builder(
+            itemBuilder: (buildContext, index) {
+              final expenses = loadedState.grouped;
+              if (index >= expenses.keys.length) {
+                return null;
+              }
+              final keys = expenses.keys.toList()
+                ..sort(
+                  (t1, t2) =>
+                      t2.millisecondsSinceEpoch - t1.millisecondsSinceEpoch,
+                );
+              final key = keys[index];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildDateSeparator(key),
+                  ...expenses[key]!.map(
+                    (expense) => ExpenseTile(
                       expense: expense,
                       currency: loadedState.details.currency,
-                    )),
-              ],
-            );
-          }),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

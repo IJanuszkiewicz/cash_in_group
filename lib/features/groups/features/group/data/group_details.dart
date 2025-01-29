@@ -3,12 +3,13 @@ import 'package:cash_in_group/core/user.dart';
 import 'package:cash_in_group/features/groups/features/group/data/expense.dart';
 
 class GroupDetails extends Model<GroupDetails> {
-  GroupDetails(
-      {required this.id,
-      required this.name,
-      required this.members,
-      required this.expenses,
-      required this.currency});
+  GroupDetails({
+    required this.id,
+    required this.name,
+    required this.members,
+    required this.expenses,
+    required this.currency,
+  });
 
   final String id;
   final String name;
@@ -19,7 +20,7 @@ class GroupDetails extends Model<GroupDetails> {
   @override
   GroupDetails fromJson(Map<String, Object> json) {
     return GroupDetails(
-      id: json["id"] as String,
+      id: json['id']! as String,
       name: name,
       members: members,
       expenses: expenses,
